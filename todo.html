@@ -14,10 +14,10 @@
 
     <div id="app">
         <div class="todo-item">
-            <input placeholder="title" type="text" v-model="item.title" />
-            <div class="text-area">{{ item.title }}</div>
-            <input placeholder="content" type="text" v-model="item.content" />
-            <div class="text-area">{{ item.content }}</div>
+            <input placeholder="title" type="text" v-model="newItem.title" />
+            <div class="text-section">{{ newItem.title }}</div>
+            <input placeholder="content" type="text" v-model="newItem.content" />
+            <div class="text-section">{{ newItem.content }}</div>
             <button class="create-btn" v-on:click="createItem">+</button>
         </div>
 
@@ -25,10 +25,10 @@
 
             <div v-show="!item.edit">Title</div>
             <input v-show="item.edit" placeholder="title" type="text" v-model="item.title" />
-            <div class="text-area">{{ item.title }}</div>
+            <div class="text-section">{{ item.title }}</div>
             <div v-show="!item.edit">Content</div>
             <input v-show="item.edit" placeholder="content" type="text" v-model="item.content" />
-            <div class="text-area">{{ item.content }}</div>
+            <div class="text-section">{{ item.content }}</div>
 
             <button v-show="!item.edit" class="delete-btn" v-on:click="deleteItem(index)">x</button>
             <button v-show="!item.edit" class="edit-btn" v-on:click="editItem(index)">//</button>
@@ -42,27 +42,32 @@
 
 
     <script>
-        let app = new Vue({
+        let vm = new Vue({
             el: "#app",
             data: {
-                item: {},
+                newItem: {},
                 list: []
             },
             methods: {
                 createItem() {
-                    this.item.edit = false;
-                    this.list.push(this.item);
-                    this.item = {};
+                    if (!this.newItem.title) {
+                        alert("Lütfen İlgili alanları doldurunuz");
+                        return;
+                    }
+                    this.newItem.edit = false;
+                    this.list.push(this.newItem);
+                    this.newItem = {};
                 },
                 deleteItem(index) {
                     this.list.splice(index, 1);
                 },
                 editItem(index) {
                     this.list[index].edit = true;
+                    vm.$set(vm.list, index, this.list[index]);
                 },
                 editItemOk(index) {
-                    this.list[index].edit = true;
-                    console.log(app);
+                    this.list[index].edit = false;
+                    vm.$set(vm.list, index, this.list[index]);
                 }
             }
         })
@@ -71,10 +76,15 @@
 
 
     <style>
+        #app {
+            max-width: 300px;
+            display: block;
+            width: 100%;
+        }
+
         .todo-item {
             position: relative;
-            width: 150px;
-            height: 90px;
+            width: 100%;
             background: rgb(22, 22, 22);
             color: #FFF;
             padding: 10px;
@@ -83,12 +93,13 @@
         }
 
         .todo-item input {
-            width: 100%;
+            width: 95%;
             margin: 5px 0;
-            padding: 0;
+            padding: 5px;
+            border-radius: 5px;
         }
 
-        .text-area {
+        .text-section {
             height: 20px;
             overflow: hidden;
         }
