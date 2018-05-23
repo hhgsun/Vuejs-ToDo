@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+</head>
+
+<body>
+
+
+    <div id="app">
+        <div class="todo-item">
+            <input placeholder="title" type="text" v-model="item.title" />
+            <div class="text-area">{{ item.title }}</div>
+            <input placeholder="content" type="text" v-model="item.content" />
+            <div class="text-area">{{ item.content }}</div>
+            <button class="create-btn" v-on:click="createItem">+</button>
+        </div>
+
+        <div v-for="(item, index) in list" class="todo-item">
+
+            <div v-show="!item.edit">Title</div>
+            <input v-show="item.edit" placeholder="title" type="text" v-model="item.title" />
+            <div class="text-area">{{ item.title }}</div>
+            <div v-show="!item.edit">Content</div>
+            <input v-show="item.edit" placeholder="content" type="text" v-model="item.content" />
+            <div class="text-area">{{ item.content }}</div>
+
+            <button v-show="!item.edit" class="delete-btn" v-on:click="deleteItem(index)">x</button>
+            <button v-show="!item.edit" class="edit-btn" v-on:click="editItem(index)">//</button>
+
+            <button v-show="item.edit" class="delete-btn" v-on:click="editItemOk(index)">></button>
+
+        </div>
+
+
+    </div>
+
+
+    <script>
+        let app = new Vue({
+            el: "#app",
+            data: {
+                item: {},
+                list: []
+            },
+            methods: {
+                createItem() {
+                    this.item.edit = false;
+                    this.list.push(this.item);
+                    this.item = {};
+                },
+                deleteItem(index) {
+                    this.list.splice(index, 1);
+                },
+                editItem(index) {
+                    this.list[index].edit = true;
+                },
+                editItemOk(index) {
+                    this.list[index].edit = true;
+                    console.log(app);
+                }
+            }
+        })
+
+    </script>
+
+
+    <style>
+        .todo-item {
+            position: relative;
+            width: 150px;
+            height: 90px;
+            background: rgb(22, 22, 22);
+            color: #FFF;
+            padding: 10px;
+            margin: 10px;
+            float: left;
+        }
+
+        .todo-item input {
+            width: 100%;
+            margin: 5px 0;
+            padding: 0;
+        }
+
+        .text-area {
+            height: 20px;
+            overflow: hidden;
+        }
+
+        button.create-btn {
+            position: absolute;
+            right: -10px;
+            bottom: -10px;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 20px;
+        }
+
+        button.delete-btn {
+            position: absolute;
+            right: -10px;
+            bottom: -10px;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 20px;
+        }
+
+        button.edit-btn {
+            position: absolute;
+            right: 30px;
+            bottom: -10px;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 20px;
+        }
+    </style>
+
+</body>
+
+</html>
